@@ -4,7 +4,7 @@
 
 export const environment = {
   production: false,
-  apiUrl: 'https://appsistema-ventas.herokuapp.com'
+  apiUrl: 'https://appsistema-ventas.herokuapp.com/api'
 };
 
 /*

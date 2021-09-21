@@ -1,0 +1,11 @@
+.contrainer-filtro {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 3fr;
+    gap: 0px 21px;
+    grid-template-areas: ". .";
+}
+
+th {
+    background-color: #5dc1d1 !important;
+}

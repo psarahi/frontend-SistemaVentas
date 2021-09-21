@@ -1,0 +1,116 @@
+<div>
+    <h1> Registro de Pedidos </h1>
+    <br>
+    <button nz-button nzType="primary" (click)="showModal()">Agregar pedido</button>
+    <br>
+    <br>
+    <nz-table #basicTable [nzData]="listPedidos">
+        <thead>
+            <tr>
+                <th nzWidth="60px"></th>
+                <th>Cliente</th>
+                <th>Vendedor</th>
+                <th>Fecha Creacion</th>
+                <th>Producto</th>
+            </tr>
+        </thead>
+        <tbody>
+            <ng-container *ngFor="let data of basicTable.data">
+                <tr>
+                    <td [nzExpand]="expandSet.has(data._id)" (nzExpandChange)="onExpandChange(data._id, $event)"></td>
+                    <td>{{ data.clientes.nombre }}</td>
+                    <td>{{ data.usuarios.nombre }}</td>
+                    <td>{{ data.fechaCreacion | date:'yyyy-MM-dd'}}</td>
+                    <button nz-button style="background-color: #b11616;
+                border-color: #b11616;" nzType="primary" nzSize="small" (click)="showModalProducto(data)">Agregar</button>
+                    <td></td>
+                </tr>
+                <tr [nzExpand]="expandSet.has(data._id)">
+                    <p *ngFor="let pro of data.productos">{{ pro.nombre }} <span style="color: #a90000;
+                      font-size: 18px;
+                      font-weight: 700;"> {{ pro.cantidad  }}</span> </p>
+                </tr>
+            </ng-container>
+        </tbody>
+    </nz-table>
+</div>
+
+<nz-modal [(nzVisible)]="isVisible" nzTitle="Crea tu pedido" (nzOnCancel)="handleCancel()" (nzOnOk)="handleOk()">
+    <form nz-form [formGroup]="validateForm" class="login-form" (ngSubmit)="submitForm()">
+        <nz-form-item>
+            <nz-form-label nzRequired>Cliente</nz-form-label>
+            <nz-form-control nzErrorTip="Ingresa el dato">
+                <nz-select formControlName="cliente">
+                    <nz-option *ngFor="let cliente of listCliente" [nzValue]="cliente._id" [nzLabel]="cliente.nombre"></nz-option>
+                </nz-select>
+            </nz-form-control>
+        </nz-form-item>
+        <nz-form-item nzAlign="top">
+            <nz-form-label nzRequired>Producto</nz-form-label>
+            <nz-form-control nzErrorTip="Ingresa el dato">
+                <nz-select formControlName="producto">
+                    <nz-option *ngFor="let pro of listProductos" [nzValue]="pro.nombre" [nzLabel]="pro.nombre + ' - ' + pro.cantidad"></nz-option>
+                </nz-select>
+            </nz-form-control>
+        </nz-form-item>
+        <nz-form-item>
+            <nz-form-label nzRequired>Cantidad</nz-form-label>
+            <nz-form-control nzErrorTip="Numero debe ser mayor a 0">
+                <nz-input-group>
+                    <input type="number" min="1" nz-input formControlName="cantidad" />
+                </nz-input-group>
+            </nz-form-control>
+        </nz-form-item>
+        <nz-form-item>
+            <nz-form-control>
+                <button style="background-color: #e7b1b1" nz-button [disabled]="!validateForm.valid" (click)="agregarProducto(validateForm.value.producto, validateForm.value.cantidad,1)">Agregar Producto</button>
+            </nz-form-control>
+        </nz-form-item>
+    </form>
+    <hr>
+    <nz-table #table [nzData]="pedidoProductos">
+        <thead>
+            <tr>
+                <th>Nombre</th>
+                <th>Cantidad</th>
+            </tr>
+        </thead>
+        <tbody>
+            <ng-container *ngFor="let data of table.data">
+                <tr>
+                    <td>{{ data.nombre }}</td>
+                    <td>{{ data.cantidad }}</td>
+                </tr>
+            </ng-container>
+        </tbody>
+    </nz-table>
+    <br><br>
+    <button nz-button style="background-color: rgb(46, 114, 51);" [disabled]="disablePedido" (click)="guardarPedido()" nzType="primary">Crear Pedido</button>
+</nz-modal>
+
+
+<nz-modal [(nzVisible)]="isVisibleproducto" nzTitle="Agrega producto" (nzOnCancel)="handleOkProducto()" (nzOnOk)="handleOkProducto()">
+    <form nz-form [formGroup]="validateFormProducto" class="login-form" (ngSubmit)="submitForm()">
+        <nz-form-item nzAlign="top">
+            <nz-form-label nzRequired>Producto</nz-form-label>
+            <nz-form-control nzErrorTip="Ingresa el dato">
+                <nz-select formControlName="producto">
+                    <nz-option *ngFor="let pro of listProductos" [nzValue]="pro.nombre" [nzLabel]="pro.nombre + ' - ' + pro.cantidad"></nz-option>
+                </nz-select>
+            </nz-form-control>
+        </nz-form-item>
+        <nz-form-item>
+            <nz-form-label nzRequired>Cantidad</nz-form-label>
+            <nz-form-control nzErrorTip="Numero debe ser mayor a 0">
+                <nz-input-group>
+                    <input type="number" min="1" nz-input formControlName="cantidad" />
+                </nz-input-group>
+            </nz-form-control>
+        </nz-form-item>
+        <nz-form-item>
+            <nz-form-control>
+                <button style="background-color: #e7b1b1" nz-button [disabled]="!validateFormProducto.valid" (click)="agregarProducto(validateFormProducto.value.producto, validateFormProducto.value.cantidad,2)">Agregar Producto</button>
+            </nz-form-control>
+        </nz-form-item>
+    </form>
+</nz-modal>

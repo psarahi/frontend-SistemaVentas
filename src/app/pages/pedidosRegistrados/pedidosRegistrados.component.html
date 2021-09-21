@@ -1,0 +1,57 @@
+<div>
+    <h1> Consulta y aprobacion de Pedidos </h1>
+    <br>
+    <br>
+    <div class="contrainer-filtro">
+        <div class="input-group input-group-sm mb-3">
+            <span class="input-group-text" id="basic-addon1">Pedido</span>
+            <nz-select [(ngModel)]="numPedido" [ngModelOptions]="{standalone: true}" nzSize="small" class="form-control">
+                <nz-option *ngFor="let pedido of listPedidos" [nzValue]="pedido._id" [nzLabel]="pedido._id"></nz-option>
+            </nz-select>
+        </div>
+        <div class="input-group input-group-sm mb-3">
+            <span class="input-group-text" id="basic-addon1">Cliente</span>
+            <nz-select [(ngModel)]="clienteFiltro" [ngModelOptions]="{standalone: true}" nzSize="small" class="form-control">
+                <nz-option *ngFor="let cliente of listCliente" [nzValue]="cliente._id" [nzLabel]="cliente.nombre"></nz-option>
+            </nz-select>
+        </div>
+        <div class="input-group input-group-sm mb-3">
+            <span class="input-group-text" id="basic-addon1">Fecha Creacion</span>
+            <nz-date-picker [(ngModel)]="fechaCreaFiltro" [ngModelOptions]="{standalone: true}"></nz-date-picker>
+
+        </div>
+        <button nz-button style="background-color: #1f9e3b;
+        border-color: #1f9e3b;" (click)="consultar()">Consultar</button>
+    </div>
+    <nz-table #basicTable [nzData]="listPedidosFiltrado">
+        <thead>
+            <tr>
+                <th nzWidth="60px"></th>
+                <th>Cliente</th>
+                <th>Vendedor</th>
+                <th>Estado</th>
+                <th>Fecha Creacion</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            <ng-container *ngFor="let data of basicTable.data">
+                <tr>
+                    <td [nzExpand]="expandSet.has(data._id)" (nzExpandChange)="onExpandChange(data._id, $event)"></td>
+                    <td>{{ data.clientes.nombre }}</td>
+                    <td>{{ data.usuarios.nombre }}</td>
+                    <td>{{ data.estado }}</td>
+                    <td>{{ data.fechaCreacion | date:'yyyy-MM-dd'}}</td>
+                    <button nz-button style="background-color: #b11616;
+              border-color: #b11616;" nzType="primary" nzSize="small" [disabled]="disableAprobar" (click)="aprobarPedido(data)">Aprobar</button>
+                    <td></td>
+                </tr>
+                <tr [nzExpand]="expandSet.has(data._id)">
+                    <p *ngFor="let pro of data.productos">{{ pro.nombre }} <span style="color: #a90000;
+                    font-size: 18px;
+                    font-weight: 700;"> {{ pro.cantidad  }}</span> </p>
+                </tr>
+            </ng-container>
+        </tbody>
+    </nz-table>
+</div>

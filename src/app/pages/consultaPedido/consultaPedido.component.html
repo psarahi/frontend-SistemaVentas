@@ -1,0 +1,39 @@
+<div>
+    <h1> Consulta de Pedidos </h1>
+    <br>
+    <div class="contrainer-filtro">
+        <div class="input-group input-group-sm mb-3">
+            <span class="input-group-text" id="basic-addon1">Rango de Fecha</span>
+            <nz-range-picker [(ngModel)]="fechas" [ngModelOptions]="{standalone: true}"></nz-range-picker>
+        </div>
+        <button nz-button style="background-color: #1f9e3b;
+    border-color: #1f9e3b;" (click)="consultar()">Consultar</button>
+    </div> <br>
+    <div style="width: 80%; margin: auto;">
+        <nz-table #basicTable [nzData]="listPedidosFiltrado">
+            <thead>
+                <tr>
+                    <th>Vendedor</th>
+                    <th>Pedidos</th>
+                </tr>
+            </thead>
+            <tbody>
+                <ng-container *ngFor="let data of basicTable.data">
+                    <tr>
+                        <td>{{ data.vendedor }}</td>
+                        <td>
+                            <div *ngFor="let item of data.pedidos">
+                                <p style="margin: 0%;"> <span style="font-size: 17px;
+                                    color: #535353;">Pedido num </span> {{ item.numpedido }}</p>
+                                <p style="margin: 0%;" *ngFor="let prod of item.productos"> {{prod.nombre }} <span style="font-size: 18px;
+                                    color: #ab0000;"> {{prod.cantidad }} </span></p>
+                            </div>
+                        </td>
+                    </tr>
+
+                </ng-container>
+            </tbody>
+        </nz-table>
+    </div>
+
+</div>
